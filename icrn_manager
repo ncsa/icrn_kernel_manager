@@ -508,7 +508,7 @@ function register_r_library_in_user_catalog() # without unpacking, identify R ke
         # "R_HOME=''" ensures we don't get complaints from R that R_HOME is set, but we're calling a Rscript that isn't located there
         # we want to get a very plain readout of where this R install's main kernel is.
         echo "getting R path."
-	    target_kernel_path=$(R_HOME='' R_LIBS_USER='' R_LIBS_SITE='' $target_unpacked/bin/Rscript --vanilla -e 'cat(.libPaths()[1])')
+	    target_kernel_path=$(R_LIBS='' R_HOME='' R_LIBS_USER='' R_LIBS_SITE='' $target_unpacked/bin/Rscript --vanilla -e 'cat(.libPaths()[1])')
         echo "determined: $target_kernel_path"
         
         echo "Updating user's catalog with $target_kernel_path"

@@ -5,8 +5,10 @@
 source "$(dirname "$0")/test_common.sh"
 
 test_help_command() {
+    setup_test_env
+    set_test_env
     local output
-    output=$("$ICRN_MANAGER" help 2>&1)
+    output=$("$ICRN_MANAGER" help 2>&1 </dev/null)
     
     # Check if help shows usage information
     if echo "$output" | grep -q "usage:" && \
@@ -19,8 +21,10 @@ test_help_command() {
 }
 
 test_invalid_command() {
+    setup_test_env
+    set_test_env
     local output
-    output=$("$ICRN_MANAGER" invalid_command 2>&1)
+    output=$("$ICRN_MANAGER" invalid_command 2>&1 </dev/null)
     
     # Check if it fails with appropriate error message
     if echo "$output" | grep -q "Function.*not recognized" || \
@@ -33,8 +37,11 @@ test_invalid_command() {
 }
 
 test_kernels_help() {
+    setup_test_env
+    set_test_env
     local output
-    output=$("$ICRN_MANAGER" kernels 2>&1)
+    # kernels (no subcommand) triggers check_and_init_if_needed -> kernels__init which prompts; pipe "y"
+    output=$(printf 'y\n' | "$ICRN_MANAGER" kernels 2>&1)
     
     # Check if it shows error for missing subcommand
     if echo "$output" | grep -q "Error: No subcommand specified" || \
