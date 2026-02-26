@@ -241,11 +241,13 @@ cleanup_test_env() {
 }
 
 # Function to set test environment variables
+# KERNEL_FOLDER must point to an existing directory or icrn_manager exits at startup.
 set_test_env() {
     export HOME="$TEST_USER_HOME"
     export ICRN_USER_BASE="$TEST_USER_HOME/.icrn"
     export ICRN_USER_KERNEL_BASE="$TEST_USER_HOME/.icrn/icrn_kernels"
     export ICRN_USER_CATALOG="$TEST_USER_HOME/.icrn/icrn_kernels/user_catalog.json"
+    export KERNEL_FOLDER="$TEST_REPO"
 }
 
 # Function to run icrn_manager with automatic confirmation for prompts

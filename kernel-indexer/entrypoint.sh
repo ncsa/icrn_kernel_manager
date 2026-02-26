@@ -15,7 +15,15 @@ DEFAULT_KERNEL_ROOT="/sw/icrn/jupyter/icrn_ncsa_resources/Kernels"
 
 # Environment variables with defaults
 KERNEL_ROOT="${KERNEL_ROOT:-${DEFAULT_KERNEL_ROOT}}"
-KERNEL_ROOT_HOST="${KERNEL_ROOT_HOST:-${KERNEL_ROOT}}"
+# When running in container with standard mount (/app/data), use host path for catalog entries
+# so catalog paths are valid on the host/NFS, not inside the container.
+if [ -n "${KERNEL_ROOT_HOST:-}" ]; then
+    : # use explicit KERNEL_ROOT_HOST
+elif [ "${KERNEL_ROOT}" = "/app/data" ]; then
+    KERNEL_ROOT_HOST="/sw/icrn/dev/kernels"
+else
+    KERNEL_ROOT_HOST="${KERNEL_ROOT}"
+fi
 OUTPUT_DIR="${OUTPUT_DIR:-${KERNEL_ROOT}}"
 LANGUAGE_FILTER="${LANGUAGE_FILTER:-}"
 LOG_LEVEL="${LOG_LEVEL:-INFO}"

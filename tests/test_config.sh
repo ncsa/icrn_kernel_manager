@@ -82,9 +82,13 @@ test_config_validation_missing_repository() {
     local output
     output=$(icrn_manager_with_confirm kernels available 2>&1)
     
-    # Check if it fails with appropriate error - the script will try to read the catalog but fail
+    # Check if it fails with appropriate error. When KERNEL_FOLDER (still set to removed
+    # TEST_REPO) is no longer a directory, the script exits at startup with "Could not
+    # determine location of kernel respository". Otherwise we get main-block messages.
     if echo "$output" | grep -q "Couldn't locate.*kernel repository" || \
        echo "$output" | grep -q "Please contact support" || \
+       echo "$output" | grep -q "Could not determine location of kernel respository" || \
+       echo "$output" | grep -q "contact administrator" || \
        echo "$output" | grep -q "Could not open file" || \
        echo "$output" | grep -q "No such file or directory"; then
         return 0
